@@ -40,6 +40,31 @@ function App() {
     }
   };
 
+  //DESDE ACA
+  const exportarExcel = async () => {
+    const respuesta = await fetch('http://localhost:5000/api/export-excel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nombre: formulario.nombre,
+        apellido: formulario.apellido,
+        fechaNacimiento: formulario.fechaNacimiento
+      })
+    });
+  
+    const blob = await respuesta.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'datos_usuario.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    //hasta ACA
+  };
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h2>Formulario de Edad</h2>
@@ -64,6 +89,10 @@ function App() {
           {mensaje}
         </div>
       )}
+
+      <button onClick={exportarExcel}>Exportar a Excel</button>
+      
+
     </div>
   );
 }
