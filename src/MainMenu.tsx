@@ -8,12 +8,6 @@ interface MainMenuProps {
 const MainMenu: React.FC<MainMenuProps> = ({ onMenuSelect }) => {
   const menuOptions = [
     {
-      id: 'patients',
-      title: 'Gestión de Pacientes',
-      description: 'Registrar, consultar y modificar información de pacientes',
-      icon: '👥'
-    },
-    {
       id: 'analyses',
       title: 'Análisis',
       description: 'Gestionar tipos de análisis y resultados de laboratorio',
@@ -24,12 +18,6 @@ const MainMenu: React.FC<MainMenuProps> = ({ onMenuSelect }) => {
       title: 'Reportes y Resultados',
       description: 'Generar reportes y consultar historial de estudios',
       icon: '📊'
-    },
-    {
-      id: 'doctors',
-      title: 'Médicos y Especialistas',
-      description: 'Administrar información de médicos y especialidades',
-      icon: '👨‍⚕️'
     }
   ];
 

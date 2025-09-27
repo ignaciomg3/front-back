@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import MainMenu from './MainMenu';
-import PatientsPage from './PatientsPage';
 import AnalysesPage from './AnalysesPage';
 import ReportsPage from './ReportsPage';
-import DoctorsPage from './DoctorsPage';
 import './App.css';
 
 function App() {
@@ -19,14 +17,10 @@ function App() {
 
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'patients':
-        return <PatientsPage onBackToMenu={handleBackToMenu} />;
       case 'analyses':
         return <AnalysesPage onBackToMenu={handleBackToMenu} />;
       case 'reports':
         return <ReportsPage onBackToMenu={handleBackToMenu} />;
-      case 'doctors':
-        return <DoctorsPage onBackToMenu={handleBackToMenu} />;
       default:
         return <MainMenu onMenuSelect={handleMenuSelect} />;
     }
