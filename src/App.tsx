@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import MainMenu from './MainMenu';
+import PatientsPage from './PatientsPage';
+import AnalysesPage from './AnalysesPage';
+import ReportsPage from './ReportsPage';
+import DoctorsPage from './DoctorsPage';
 import './App.css';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<string>('menu');
+
+  const handleMenuSelect = (option: string) => {
+    setCurrentPage(option);
+  };
+
+  const handleBackToMenu = () => {
+    setCurrentPage('menu');
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'patients':
+        return <PatientsPage onBackToMenu={handleBackToMenu} />;
+      case 'analyses':
+        return <AnalysesPage onBackToMenu={handleBackToMenu} />;
+      case 'reports':
+        return <ReportsPage onBackToMenu={handleBackToMenu} />;
+      case 'doctors':
+        return <DoctorsPage onBackToMenu={handleBackToMenu} />;
+      default:
+        return <MainMenu onMenuSelect={handleMenuSelect} />;
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {renderCurrentPage()}
     </div>
   );
 }
