@@ -9,17 +9,17 @@ interface MuestrasPageProps {
 }
 
 const MuestrasPage: React.FC<MuestrasPageProps> = ({ onBackToMenu }) => {
-  const { muestras, loading, error, refetch } = useMuestras();
+  const { muestras, loading, error, pagination, fetchMuestras, changePage, changePageSize } = useMuestras();
   const [filters, setFilters] = useState<MuestrasFilters>({});
 
   const handleFilterChange = (newFilters: MuestrasFilters) => {
     setFilters(newFilters);
-    refetch(newFilters);
+    fetchMuestras(newFilters);
   };
 
   const clearFilters = () => {
     setFilters({});
-    refetch();
+    fetchMuestras();
   };
 
   const totalParametros = muestras.reduce((total, muestra) => {
@@ -115,7 +115,10 @@ const MuestrasPage: React.FC<MuestrasPageProps> = ({ onBackToMenu }) => {
           muestras={muestras}
           loading={loading}
           error={error}
-          onRefresh={() => refetch(filters)}
+          pagination={pagination}
+          onRefresh={() => fetchMuestras(filters)}
+          onChangePage={changePage}
+          onChangePageSize={changePageSize}
         />
       </div>
     </PageLayout>

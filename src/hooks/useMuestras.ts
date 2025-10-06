@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Muestra, MuestrasResponse, MuestrasFilters } from '../types/muestras';
+import { Muestra, MuestrasResponse, MuestrasFilters, MuestrasPaginationParams } from '../types/muestras';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -7,6 +7,12 @@ export const useMuestras = () => {
   const [muestras, setMuestras] = useState<Muestra[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    total: 0,
+    limit: 10
+  });
 
   // Datos de ejemplo para desarrollo/fallback
   const generateMockData = (): Muestra[] => {
@@ -126,12 +132,22 @@ export const useMuestras = () => {
     ];
   };
 
-  const fetchMuestras = async (filters?: MuestrasFilters) => {
+  const fetchMuestras = async (filters?: MuestrasFilters, paginationParams?: MuestrasPaginationParams) => {
     setLoading(true);
     setError(null);
     
+    const page = paginationParams?.page || pagination.page;
+    const limit = paginationParams?.limit || pagination.limit;
+    
     try {
-      const url = new URL(`${API_BASE_URL}/api/muestras`);
+      // Usar la nueva API con endpoint /todas
+      const url = new URL(`${API_BASE_URL}/api/muestras/todas`);
+      
+      // Agregar parámetros de paginación
+      url.searchParams.append('page', page.toString());
+      url.searchParams.append('limit', limit.toString());
+      
+      // Agregar filtros si existen
       if (filters?.muestra_nombre) url.searchParams.append('muestra_nombre', filters.muestra_nombre);
       if (filters?.nro_informe) url.searchParams.append('nro_informe', filters.nro_informe.toString());
 
@@ -148,9 +164,17 @@ export const useMuestras = () => {
       
       if (data.success && data.data) {
         setMuestras(data.data);
+        setPagination({
+          page: data.page,
+          totalPages: data.totalPages,
+          total: data.total,
+          limit: limit
+        });
       } else if (Array.isArray(data)) {
-        // Si el endpoint devuelve directamente el array
+        // Si el endpoint devuelve directamente el array (fallback)
+        const mockPagination = generateMockPagination(data.length, page, limit);
         setMuestras(data as unknown as Muestra[]);
+        setPagination(mockPagination);
       } else {
         throw new Error('Error en la respuesta del servidor');
       }
@@ -160,10 +184,34 @@ export const useMuestras = () => {
       setError(errorMessage);
       // En caso de error, mostrar datos de ejemplo para desarrollo
       console.log('Using mock data for muestras');
-      setMuestras(generateMockData());
+      const mockData = generateMockData();
+      const mockPag = generateMockPagination(mockData.length, page, limit);
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      setMuestras(mockData.slice(startIndex, endIndex));
+      setPagination(mockPag);
     } finally {
       setLoading(false);
     }
+  };
+
+  const generateMockPagination = (totalItems: number, currentPage: number, pageSize: number) => {
+    return {
+      page: currentPage,
+      totalPages: Math.ceil(totalItems / pageSize),
+      total: totalItems,
+      limit: pageSize
+    };
+  };
+
+  const changePage = (newPage: number) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      fetchMuestras(undefined, { page: newPage, limit: pagination.limit });
+    }
+  };
+
+  const changePageSize = (newLimit: number) => {
+    fetchMuestras(undefined, { page: 1, limit: newLimit });
   };
 
   useEffect(() => {
@@ -175,6 +223,10 @@ export const useMuestras = () => {
     muestras,
     loading,
     error,
+    pagination,
+    fetchMuestras,
+    changePage,
+    changePageSize,
     refetch: fetchMuestras
   };
 };

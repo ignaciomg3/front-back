@@ -368,3 +368,124 @@
     padding: 0.75rem;
   }
 }
+
+/* Estilos de paginación */
+.pagination-container {
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+  border-top: 2px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pagination-info {
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.page-size-selector {
+  padding: 0.5rem;
+  border: 2px solid #dee2e6;
+  border-radius: 5px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-size-selector:hover {
+  border-color: #17a2b8;
+}
+
+.page-size-selector:focus {
+  outline: none;
+  border-color: #17a2b8;
+  box-shadow: 0 0 0 2px rgba(23, 162, 184, 0.25);
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-btn {
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  color: #495057;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: fit-content;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.page-btn:disabled {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  color: #adb5bd;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.page-info {
+  padding: 0 1rem;
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+}
+
+/* Responsive para paginación */
+@media (max-width: 768px) {
+  .pagination-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .pagination-controls {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .page-navigation {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .page-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-btn {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .page-info {
+    padding: 0 0.5rem;
+    font-size: 0.85rem;
+  }
+}

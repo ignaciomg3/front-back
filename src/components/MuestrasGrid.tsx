@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { Muestra } from '../types/muestras';
+import { Muestra, MuestrasPagination } from '../types/muestras';
 import './MuestrasGrid.css';
 
 interface MuestrasGridProps {
   muestras: Muestra[];
   loading: boolean;
   error: string | null;
+  pagination: MuestrasPagination;
   onRefresh: () => void;
+  onChangePage: (page: number) => void;
+  onChangePageSize: (pageSize: number) => void;
 }
 
-const MuestrasGrid: React.FC<MuestrasGridProps> = ({ muestras, loading, error, onRefresh }) => {
+const MuestrasGrid: React.FC<MuestrasGridProps> = ({ 
+  muestras, 
+  loading, 
+  error, 
+  pagination, 
+  onRefresh,
+  onChangePage,
+  onChangePageSize 
+}) => {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
   const toggleRow = (id: string) => {
@@ -139,6 +150,66 @@ const MuestrasGrid: React.FC<MuestrasGridProps> = ({ muestras, loading, error, o
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Controles de paginación */}
+      {!loading && !error && muestras.length > 0 && (
+        <div className="pagination-container">
+          <div className="pagination-info">
+            Mostrando {((pagination.page - 1) * pagination.limit) + 1} a{' '}
+            {Math.min(pagination.page * pagination.limit, pagination.total)} de{' '}
+            {pagination.total} muestras
+          </div>
+          
+          <div className="pagination-controls">
+            <select 
+              value={pagination.limit} 
+              onChange={(e) => onChangePageSize(parseInt(e.target.value))}
+              className="page-size-selector"
+            >
+              <option value={5}>5 por página</option>
+              <option value={10}>10 por página</option>
+              <option value={20}>20 por página</option>
+              <option value={50}>50 por página</option>
+            </select>
+
+            <div className="page-navigation">
+              <button 
+                onClick={() => onChangePage(1)}
+                disabled={pagination.page === 1}
+                className="page-btn"
+              >
+                ⏮️ Primera
+              </button>
+              <button 
+                onClick={() => onChangePage(pagination.page - 1)}
+                disabled={pagination.page === 1}
+                className="page-btn"
+              >
+                ◀️ Anterior
+              </button>
+              
+              <span className="page-info">
+                Página {pagination.page} de {pagination.totalPages}
+              </span>
+              
+              <button 
+                onClick={() => onChangePage(pagination.page + 1)}
+                disabled={pagination.page === pagination.totalPages}
+                className="page-btn"
+              >
+                Siguiente ▶️
+              </button>
+              <button 
+                onClick={() => onChangePage(pagination.totalPages)}
+                disabled={pagination.page === pagination.totalPages}
+                className="page-btn"
+              >
+                Última ⏭️
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

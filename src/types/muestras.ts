@@ -16,10 +16,25 @@ export interface Muestra {
 export interface MuestrasResponse {
   success: boolean;
   count: number;
+  total: number;
+  page: number;
+  totalPages: number;
   data: Muestra[];
 }
 
 export interface MuestrasFilters {
   muestra_nombre?: string;
   nro_informe?: number;
+}
+
+export interface MuestrasPaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface MuestrasPagination {
+  page: number;
+  totalPages: number;
+  total: number;
+  limit: number;
 }
