@@ -14,6 +14,12 @@ const MainMenu: React.FC<MainMenuProps> = ({ onMenuSelect }) => {
       icon: '🧪'
     },
     {
+      id: 'muestras',
+      title: 'Muestras',
+      description: 'Gestionar muestras y sus parámetros de análisis',
+      icon: '🥽'
+    },
+    {
       id: 'reports',
       title: 'Reportes y Resultados',
       description: 'Generar reportes y consultar historial de estudios',

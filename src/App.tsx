@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MainMenu from './MainMenu';
 import AnalysesPage from './AnalysesPage';
+import MuestrasPage from './MuestrasPage';
 import ReportsPage from './ReportsPage';
 import './App.css';
 
@@ -19,6 +20,8 @@ function App() {
     switch (currentPage) {
       case 'analyses':
         return <AnalysesPage onBackToMenu={handleBackToMenu} />;
+      case 'muestras':
+        return <MuestrasPage onBackToMenu={handleBackToMenu} />;
       case 'reports':
         return <ReportsPage onBackToMenu={handleBackToMenu} />;
       default:
